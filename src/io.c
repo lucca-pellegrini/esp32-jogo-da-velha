@@ -67,3 +67,28 @@ void flash_cursor(int cursor_pos, char player)
 	delay(200);
 	set_led_color(cursor_pos, BLANK);
 }
+
+void blink_winner(char player, char board[SIZE][SIZE])
+{
+	Color c = (player == 'X') ? GREEN : RED;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < SIZE; ++i) {
+			for (int j = 0; j < SIZE; ++j) {
+				if (board[i][j] != player)
+					continue;
+
+				set_led_color(i * SIZE + j, BLANK);
+				delay(100);
+				set_led_color(i * SIZE + j, c);
+				print_led_board(board);
+			}
+		}
+		delay(500);
+	}
+
+	for (int i = 0; i < SIZE; ++i)
+		for (int j = 0; j < SIZE; ++j)
+			if (board[i][j] != player)
+				set_led_color(i * SIZE + j, BLANK);
+}

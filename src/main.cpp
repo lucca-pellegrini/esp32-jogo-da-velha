@@ -188,6 +188,8 @@ void loop()
 		Serial.print("Jogador “");
 		Serial.print(cur_player);
 		Serial.println("” ganhou!");
+		delay(1500);
+		blink_winner(cur_player, board);
 	} else if (game_draw) {
 		Serial.println("Empate!");
 	}

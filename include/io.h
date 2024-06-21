@@ -24,6 +24,7 @@ void set_led_color(int led_pos, Color color);
 bool is_button_pressed(int button_pin);
 void move_cursor(int *cursor_pos, char board[SIZE][SIZE]);
 void flash_cursor(int cursor_pos, char player);
+void blink_winner(char player, char board[SIZE][SIZE]);
 
 #ifdef __cplusplus
 }
