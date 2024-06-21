@@ -68,6 +68,43 @@ void flash_cursor(int cursor_pos, char player)
 	set_led_color(cursor_pos, BLANK);
 }
 
+void boot_blink(void)
+{
+	for (int i = 0; i < NUM_LEDS; ++i) {
+		digitalWrite(reds[i], HIGH);
+		delay(100);
+	}
+	for (int i = 0; i < NUM_LEDS; ++i) {
+		digitalWrite(reds[i], LOW);
+		digitalWrite(greens[i], HIGH);
+		delay(100);
+	}
+	for (int i = 0; i < NUM_LEDS; ++i) {
+		digitalWrite(greens[i], LOW);
+		delay(100);
+	}
+	for (int i = 0; i < NUM_LEDS; i += 2)
+		digitalWrite(reds[i], HIGH);
+	delay(250);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(reds[i], LOW);
+	for (int i = 1; i < NUM_LEDS; i += 2)
+		digitalWrite(reds[i], HIGH);
+	delay(250);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(reds[i], LOW);
+	for (int i = 0; i < NUM_LEDS; i += 2)
+		digitalWrite(greens[i], HIGH);
+	delay(250);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(greens[i], LOW);
+	for (int i = 1; i < NUM_LEDS; i += 2)
+		digitalWrite(greens[i], HIGH);
+	delay(250);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(greens[i], LOW);
+}
+
 void blink_winner(char player, char board[SIZE][SIZE])
 {
 	Color c = (player == 'X') ? GREEN : RED;

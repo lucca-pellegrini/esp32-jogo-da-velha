@@ -4,8 +4,6 @@
 #include "io.h"
 #include "player.h"
 
-static void boot_blink();
-
 void setup()
 {
 	Serial.begin(115200);
@@ -18,43 +16,6 @@ void setup()
 	pinMode(BTN2, INPUT);
 
 	boot_blink();
-}
-
-static void boot_blink()
-{
-	for (int i = 0; i < NUM_LEDS; ++i) {
-		digitalWrite(reds[i], HIGH);
-		delay(100);
-	}
-	for (int i = 0; i < NUM_LEDS; ++i) {
-		digitalWrite(reds[i], LOW);
-		digitalWrite(greens[i], HIGH);
-		delay(100);
-	}
-	for (int i = 0; i < NUM_LEDS; ++i) {
-		digitalWrite(greens[i], LOW);
-		delay(100);
-	}
-	for (int i = 0; i < NUM_LEDS; i += 2)
-		digitalWrite(reds[i], HIGH);
-	delay(250);
-	for (int i = 0; i < NUM_LEDS; ++i)
-		digitalWrite(reds[i], LOW);
-	for (int i = 1; i < NUM_LEDS; i += 2)
-		digitalWrite(reds[i], HIGH);
-	delay(250);
-	for (int i = 0; i < NUM_LEDS; ++i)
-		digitalWrite(reds[i], LOW);
-	for (int i = 0; i < NUM_LEDS; i += 2)
-		digitalWrite(greens[i], HIGH);
-	delay(250);
-	for (int i = 0; i < NUM_LEDS; ++i)
-		digitalWrite(greens[i], LOW);
-	for (int i = 1; i < NUM_LEDS; i += 2)
-		digitalWrite(greens[i], HIGH);
-	delay(250);
-	for (int i = 0; i < NUM_LEDS; ++i)
-		digitalWrite(greens[i], LOW);
 }
 
 void loop()
