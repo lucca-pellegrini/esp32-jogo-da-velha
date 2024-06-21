@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#include <time.h>
+
 #include "board.h"
 #include "io.h"
 #include "player.h"
