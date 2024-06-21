@@ -92,3 +92,17 @@ void blink_winner(char player, char board[SIZE][SIZE])
 			if (board[i][j] != player)
 				set_led_color(i * SIZE + j, BLANK);
 }
+
+void blink_draw(char board[SIZE][SIZE])
+{
+	for (int i = 0; i < 5; ++i) {
+		for (int i = 0; i < SIZE; ++i) {
+			for (int j = 0; j < SIZE; ++j) {
+				set_led_color(i * SIZE + j, BLANK);
+			}
+		}
+		delay(500);
+		print_led_board(board);
+		delay(500);
+	}
+}

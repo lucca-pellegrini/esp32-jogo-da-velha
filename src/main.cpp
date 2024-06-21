@@ -192,6 +192,7 @@ void loop()
 		blink_winner(cur_player, board);
 	} else if (game_draw) {
 		Serial.println("Empate!");
+		delay(1500);
+		blink_draw(board);
 	}
-
 }
