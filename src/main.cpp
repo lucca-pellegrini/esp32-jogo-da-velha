@@ -152,12 +152,10 @@ void loop()
 				delay(200);
 				flash_cursor(cursor_pos, cur_player);
 				if (is_button_pressed(BTN1)) {
-					Serial.println("Apertou botão 1");
 					move_cursor(&cursor_pos, board);
 					delay(500); // Debounce delay
 				}
 				if (is_button_pressed(BTN2)) {
-					Serial.println("Apertou botão 2");
 					int row = cursor_pos / SIZE;
 					int col = cursor_pos % SIZE;
 					if (make_move(board, row, col,
