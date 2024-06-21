@@ -44,3 +44,26 @@ void print_led_board(char board[SIZE][SIZE])
 		}
 	}
 }
+
+// Função para detectar o estado do botão.
+bool is_button_pressed(int button_pin)
+{
+	return digitalRead(button_pin) == HIGH;
+}
+
+// Função para mover o cursor para a próxima posição vazia.
+void move_cursor(int *cursor_pos, char board[SIZE][SIZE])
+{
+	do {
+		*cursor_pos = (*cursor_pos + 1) % (SIZE * SIZE);
+	} while (board[*cursor_pos / SIZE][*cursor_pos % SIZE] != ' ');
+}
+
+// Função para piscar o LED na posição do cursor.
+void flash_cursor(int cursor_pos, char player)
+{
+	Color color = (player == 'X') ? GREEN : RED;
+	set_led_color(cursor_pos, color);
+	delay(200);
+	set_led_color(cursor_pos, BLANK);
+}

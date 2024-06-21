@@ -66,17 +66,13 @@ void loop()
 	Difficulty difficulty2 = EASY; // Dificuldade do segundo computador.
 	bool game_won; // Se o jogo terminou em vitória.
 	bool game_draw; // Se o jogo terminou em empate.
-	char rematch; // Se o usuário vai querer repetir o jogo.
 
 	srand(time(NULL)); // Inicializa o estado interno da função `rand()`.
-
-begin: // Rótulo de começo de jogo, caso o usuário queira jogar de novo.
 
 	// Inicializa todos os valores padrão.
 	cur_player = 'X';
 	game_won = false;
 	game_draw = false;
-	rematch = '\0';
 
 	init_board(board); // Inicializa o tabuleiro.
 
@@ -135,7 +131,6 @@ begin: // Rótulo de começo de jogo, caso o usuário queira jogar de novo.
 
 	// Itera até o jogo estar terminado.
 	while (!game_won && !game_draw) {
-		int row, col;
 		print_board(board); // Mostra o tabuleiro.
 
 		// Determina se o próximo jogador é um usuário ou o computador.
@@ -150,23 +145,32 @@ begin: // Rótulo de começo de jogo, caso o usuário queira jogar de novo.
 				cpu_move(board, cur_player, difficulty2);
 			delay(2000);
 		} else {
-			Serial.print("Jogador “");
-			Serial.print(cur_player);
-			Serial.println(
-				"”, digite a sua jogada (linha e coluna): ");
-			while (Serial.available() == 0) {
-			} // Espera o usuário digitar.
-			row = Serial.parseInt();
-			while (Serial.available() == 0) {
-			} // Espera o usuário digitar.
-			col = Serial.parseInt();
-
-			// Faz a jogada digitada, mas verifica se foi inválida.
-			if (!make_move(board, row - 1, col - 1, cur_player)) {
-				Serial.println(
-					"Jogada inválida. Tente novamente.");
-				continue;
+			bool move_confirmed = false;
+			int cursor_pos = -1;
+			move_cursor(&cursor_pos, board);
+			while (!move_confirmed) {
+				delay(200);
+				flash_cursor(cursor_pos, cur_player);
+				if (is_button_pressed(BTN1)) {
+					Serial.println("Apertou botão 1");
+					move_cursor(&cursor_pos, board);
+					delay(500); // Debounce delay
+				}
+				if (is_button_pressed(BTN2)) {
+					Serial.println("Apertou botão 2");
+					int row = cursor_pos / SIZE;
+					int col = cursor_pos % SIZE;
+					if (make_move(board, row, col,
+						      cur_player)) {
+						move_confirmed = true;
+					} else {
+						Serial.println(
+							"Jogada inválida. Tente novamente.");
+					}
+					delay(500); // Debounce delay
+				}
 			}
+			print_led_board(board);
 		}
 
 		// Verifica o estado do jogo.
@@ -188,17 +192,4 @@ begin: // Rótulo de começo de jogo, caso o usuário queira jogar de novo.
 		Serial.println("Empate!");
 	}
 
-	// Pergunta ao usuário se ele quer jogar de novo.
-	do {
-		Serial.println("\nJogar de novo? (responda ‘S’ ou ‘N’): ");
-		while (Serial.available() == 0) {
-		} // Espera o usuário digitar.
-		rematch = toupper(Serial.read());
-	} while (rematch != 'S' && rematch != 'N');
-
-	// Se o usuário respondeu que sim, volta ao rótulo `begin`, acima.
-	if (rematch == 'S') {
-		Serial.println("Reiniciando o jogo…\n\n");
-		goto begin;
-	}
 }

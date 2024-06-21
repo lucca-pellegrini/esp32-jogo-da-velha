@@ -6,8 +6,8 @@ extern "C" {
 
 #include "board.h"
 
-#define BTN1 35
-#define BTN2 34
+#define BTN1 34
+#define BTN2 35
 #define NUM_LEDS 9
 
 static const int reds[NUM_LEDS] = { 15, 0, 16, 5, 19, 22, 13, 14, 26 };
@@ -21,6 +21,9 @@ typedef enum {
 
 void print_led_board(char board[SIZE][SIZE]);
 void set_led_color(int led_pos, Color color);
+bool is_button_pressed(int button_pin);
+void move_cursor(int *cursor_pos, char board[SIZE][SIZE]);
+void flash_cursor(int cursor_pos, char player);
 
 #ifdef __cplusplus
 }
