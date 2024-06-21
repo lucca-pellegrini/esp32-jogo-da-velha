@@ -17,6 +17,8 @@ void setup()
 	pinMode(BTN1, INPUT);
 	pinMode(BTN2, INPUT);
 
+	srand(time(NULL)); // Inicializa o estado interno da função `rand()`.
+
 	boot_blink();
 }
 
@@ -29,8 +31,6 @@ void loop()
 	Difficulty difficulty2 = EASY; // Dificuldade do segundo computador.
 	bool game_won; // Se o jogo terminou em vitória.
 	bool game_draw; // Se o jogo terminou em empate.
-
-	srand(time(NULL)); // Inicializa o estado interno da função `rand()`.
 
 	// Inicializa todos os valores padrão.
 	cur_player = 'X';
