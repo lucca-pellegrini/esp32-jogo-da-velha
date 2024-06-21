@@ -99,9 +99,11 @@ void loop()
 		// Determina se o próximo jogador é um usuário ou o computador.
 		if (game_mode == 2 && cur_player == 'O') {
 			Serial.println("O computador está jogando…");
+			delay(1000);
 			cpu_move(board, cur_player, difficulty);
 		} else if (game_mode == 3) {
 			Serial.println("O computador está jogando…");
+			delay(1000);
 			if (cur_player == 'X')
 				cpu_move(board, cur_player, difficulty);
 			else
@@ -111,6 +113,7 @@ void loop()
 			bool move_confirmed = false;
 			int cursor_pos = -1;
 			move_cursor(&cursor_pos, board);
+			delay(1000);
 			while (!move_confirmed) {
 				delay(200);
 				flash_cursor(cursor_pos, cur_player);
