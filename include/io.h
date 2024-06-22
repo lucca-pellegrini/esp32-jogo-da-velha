@@ -6,8 +6,8 @@ extern "C" {
 
 #include "board.h"
 
-#define BTN1 34
-#define BTN2 35
+#define BTN1 35
+#define BTN2 34
 #define NUM_LEDS 9
 
 static const int reds[NUM_LEDS] = { 15, 0, 16, 5, 19, 22, 13, 14, 26 };
