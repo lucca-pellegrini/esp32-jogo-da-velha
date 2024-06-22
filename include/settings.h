@@ -19,7 +19,24 @@ typedef enum {
 	BLUETOOTH_SETTINGS
 } SettingsMode;
 
-typedef enum { EASY_DIFF, NORMAL_DIFF, HARD_DIFF } BtMsg;
+typedef enum {
+	// Tela de seleção de modo de jogo.
+	PVP = 1,
+	PVE = 2,
+
+	// Tela de seleção de dificuldade.
+	EASY_DIFF = 3,
+	NORMAL_DIFF = 4,
+	HARD_DIFF = 5,
+
+	// Tela de escolha de quem vai jogar primeiro.
+	PLAYER_FIRST = 6,
+	CPU_FIRST = 7,
+
+	// Tela de jogo.
+	SCORE_P1 = 8,
+	SCORE_P2 = 9,
+} BtMsg;
 
 void set_sm(void);
 void modal_setup(void);
