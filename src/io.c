@@ -148,13 +148,21 @@ void blink_draw(char board[SIZE][SIZE])
 
 void blink_all(Color c)
 {
-	delay(500);
+	int *vec = NULL;
 	if (c == GREEN)
-		for (int i = 0; i < NUM_LEDS; ++i)
-			digitalWrite(greens[i], HIGH);
+		vec = (int *)greens;
 	else
-		for (int i = 0; i < NUM_LEDS; ++i)
-			digitalWrite(reds[i], HIGH);
+		vec = (int *)reds;
+
+	delay(500);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(vec[i], HIGH);
+	delay(1000);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(vec[i], LOW);
+	delay(500);
+	for (int i = 0; i < NUM_LEDS; ++i)
+		digitalWrite(vec[i], HIGH);
 	delay(750);
 	for (int i = 0; i < NUM_LEDS; ++i) {
 		digitalWrite(greens[i], LOW);
