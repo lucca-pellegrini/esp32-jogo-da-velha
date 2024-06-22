@@ -5,11 +5,10 @@
 #include "board.h"
 #include "io.h"
 #include "player.h"
+#include "settings.h"
 
 void setup()
 {
-	Serial.begin(115200);
-
 	for (int i = 0; i < NUM_LEDS; ++i) {
 		pinMode(greens[i], OUTPUT);
 		pinMode(reds[i], OUTPUT);
@@ -20,94 +19,44 @@ void setup()
 	srand(time(NULL)); // Inicializa o estado interno da função `rand()`.
 
 	boot_blink();
+	set_sm();
+	modal_setup();
 }
 
 void loop()
 {
+	// Configurações de jogo padrão.
+	Options opt = { .game_mode = 2,
+			.difficulty = NORMAL,
+			.difficulty2 = NORMAL,
+			.first = Options::PLAYER };
 	char board[SIZE][SIZE]; // Tabuleiro (matriz).
 	char cur_player; // Jogador atual.
-	int game_mode = -1; // Modo de jogo (lido do usuário, abaixo).
-	Difficulty difficulty = EASY; // Dificuldade (lida do usuário, abaixo).
-	Difficulty difficulty2 = EASY; // Dificuldade do segundo computador.
-	bool game_won; // Se o jogo terminou em vitória.
-	bool game_draw; // Se o jogo terminou em empate.
-
-	// Inicializa todos os valores padrão.
-	cur_player = 'X';
-	game_won = false;
-	game_draw = false;
+	bool game_won = false; // Se o jogo terminou em vitória.
+	bool game_draw = false; // Se o jogo terminou em empate.
 
 	init_board(board); // Inicializa o tabuleiro.
+	get_settings(&opt); // Recebe as configurações.
 
-	// Pede ao usuário que escolha um modo de jogo.
-	do {
-		Serial.println("Escolha um modo de jogo:");
-		Serial.println("1. Jogador vs jogador");
-		Serial.println("2. Jogador vs computador");
-		Serial.println("3. Computador vs computador");
-		while (Serial.available() == 0) {
-		} // Espera o usuário digitar.
-		game_mode = Serial.parseInt();
-	} while (game_mode < 1 || game_mode > 3);
-
-	// Caso escolha jogar contra o computador, decida quem jogará primeiro.
-	if (game_mode == 2) {
-		int primeiro = -1;
-		do {
-			Serial.println("\nQuem jogará primeiro?");
-			Serial.println("1. Jogador");
-			Serial.println("2. Computador");
-			while (Serial.available() == 0) {
-			} // Espera o usuário digitar.
-			primeiro = Serial.parseInt();
-		} while (primeiro < 1 || primeiro > 2);
-		cur_player = (primeiro == 1) ? 'X' : 'O';
-	}
-
-	// Leia a dificuldade do computador.
-	if (game_mode == 2 || game_mode == 3) {
-		do {
-			Serial.println("\nEscolha a dificuldade:");
-			Serial.println("1. Fácil");
-			Serial.println("2. Normal");
-			Serial.println("3. Difícil");
-			while (Serial.available() == 0) {
-			} // Espera o usuário digitar.
-			difficulty = static_cast<Difficulty>(Serial.parseInt());
-		} while (difficulty < EASY || difficulty > HARD);
-	}
-
-	// Caso escolha assistir, leia a dificuldade do oponente.
-	if (game_mode == 3) {
-		do {
-			Serial.println(
-				"\nEscolha a dificuldade para o oponente:");
-			Serial.println("1. Fácil");
-			Serial.println("2. Normal");
-			Serial.println("3. Difícil");
-			while (Serial.available() == 0) {
-			} // Espera o usuário digitar.
-			difficulty2 =
-				static_cast<Difficulty>(Serial.parseInt());
-		} while (difficulty2 < EASY || difficulty2 > HARD);
-	}
+	// Determina jogador atual baseado em quem jogará primeiro.
+	cur_player = (opt.first == Options::PLAYER) ? 'X' : 'O';
 
 	// Itera até o jogo estar terminado.
 	while (!game_won && !game_draw) {
 		print_board(board); // Mostra o tabuleiro.
 
 		// Determina se o próximo jogador é um usuário ou o computador.
-		if (game_mode == 2 && cur_player == 'O') {
+		if (opt.game_mode == 2 && cur_player == 'O') {
 			Serial.println("O computador está jogando…");
 			delay(1000);
-			cpu_move(board, cur_player, difficulty);
-		} else if (game_mode == 3) {
+			cpu_move(board, cur_player, opt.difficulty);
+		} else if (opt.game_mode == 3) {
 			Serial.println("O computador está jogando…");
 			delay(1000);
 			if (cur_player == 'X')
-				cpu_move(board, cur_player, difficulty);
+				cpu_move(board, cur_player, opt.difficulty);
 			else
-				cpu_move(board, cur_player, difficulty2);
+				cpu_move(board, cur_player, opt.difficulty2);
 			delay(2000);
 		} else {
 			bool move_confirmed = false;

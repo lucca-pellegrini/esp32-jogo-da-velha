@@ -128,6 +128,8 @@ void blink_winner(char player, char board[SIZE][SIZE])
 		for (int j = 0; j < SIZE; ++j)
 			if (board[i][j] != player)
 				set_led_color(i * SIZE + j, BLANK);
+
+	delay(2000);
 }
 
 void blink_draw(char board[SIZE][SIZE])
@@ -141,5 +143,22 @@ void blink_draw(char board[SIZE][SIZE])
 		delay(500);
 		print_led_board(board);
 		delay(500);
+	}
+}
+
+void blink_all(Color c)
+{
+	delay(500);
+	if (c == GREEN)
+		for (int i = 0; i < NUM_LEDS; ++i)
+			digitalWrite(greens[i], HIGH);
+	else
+		for (int i = 0; i < NUM_LEDS; ++i)
+			digitalWrite(reds[i], HIGH);
+	delay(750);
+	for (int i = 0; i < NUM_LEDS; ++i) {
+		digitalWrite(greens[i], LOW);
+		digitalWrite(reds[i], LOW);
+		delay(100);
 	}
 }

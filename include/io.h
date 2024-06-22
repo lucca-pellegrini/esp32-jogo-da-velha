@@ -27,6 +27,7 @@ void flash_cursor(int cursor_pos, char player);
 void boot_blink(void);
 void blink_winner(char player, char board[SIZE][SIZE]);
 void blink_draw(char board[SIZE][SIZE]);
+void blink_all(Color c);
 
 #ifdef __cplusplus
 }
