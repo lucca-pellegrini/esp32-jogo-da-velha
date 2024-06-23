@@ -13,11 +13,7 @@ extern "C" {
 static const int reds[NUM_LEDS] = { 15, 0, 16, 5, 19, 22, 13, 14, 26 };
 static const int greens[NUM_LEDS] = { 2, 4, 17, 18, 33, 23, 12, 27, 25 };
 
-typedef enum {
-	BLANK,
-	RED,
-	GREEN
-} Color;
+typedef enum { BLANK, RED, GREEN } Color;
 
 void print_led_board(char board[SIZE][SIZE]);
 void set_led_color(int led_pos, Color color);
@@ -28,6 +24,7 @@ void boot_blink(void);
 void blink_winner(char player, char board[SIZE][SIZE]);
 void blink_draw(char board[SIZE][SIZE]);
 void blink_all(Color c);
+void blink_loading(Color c);
 
 #ifdef __cplusplus
 }

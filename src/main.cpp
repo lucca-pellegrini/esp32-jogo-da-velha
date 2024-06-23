@@ -64,6 +64,8 @@ void loop()
 			move_cursor(&cursor_pos, board);
 			delay(1000);
 			while (!move_confirmed) {
+				if (check_and_handle_bt() == RETURN)
+					return;
 				delay(200);
 				flash_cursor(cursor_pos, cur_player);
 				if (is_button_pressed(BTN1)) {
@@ -76,9 +78,6 @@ void loop()
 					if (make_move(board, row, col,
 						      cur_player)) {
 						move_confirmed = true;
-					} else {
-						Serial.println(
-							"Jogada inválida. Tente novamente.");
 					}
 					delay(500); // Debounce delay
 				}

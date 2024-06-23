@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include <Arduino.h>
 #include <BluetoothSerial.h>
 
@@ -5,6 +6,7 @@
 #include "io.h"
 
 static SettingsMode SM;
+static Options SettingsBT = { .is_set = false };
 static BluetoothSerial SerialBT;
 
 void set_sm(void)
@@ -28,6 +30,7 @@ void modal_setup(void)
 		break;
 	case BLUETOOTH_SETTINGS:
 		SerialBT.begin("O Jogo da Velha");
+		Serial.begin(115200);
 		break;
 	default:
 		break;
@@ -90,6 +93,71 @@ static void get_serial_settings(Options *opt)
 	}
 }
 
+BtAction check_and_handle_bt(void)
+{
+	if (!SerialBT.available())
+		return CONTINUE;
+
+	SettingsBT.is_set = false;
+	return RETURN;
+}
+
+static void get_bt_settings(Options *opt)
+{
+	if (SettingsBT.is_set) {
+		*opt = SettingsBT;
+		return;
+	}
+
+	while (!SettingsBT.is_set) {
+		while (!SerialBT.available())
+			blink_loading(GREEN);
+
+		int msg = SerialBT.read();
+		Serial.print("Código recebido por Bluetooth: ");
+
+		switch (msg) {
+		case PVP:
+			Serial.println("PVP");
+			opt->game_mode = 1;
+			opt->first = Options::CPU;
+			opt->is_set = SettingsBT.is_set = true;
+			break;
+			break;
+		case PVE:
+			Serial.println("PVE");
+			opt->game_mode = 2;
+			break;
+
+		case EASY_DIFF:
+			Serial.println("EASY_DIFF");
+			opt->difficulty = EASY;
+			break;
+		case NORMAL_DIFF:
+			Serial.println("NORMAL_DIFF");
+			opt->difficulty = NORMAL;
+			break;
+		case HARD_DIFF:
+			Serial.println("HARD_DIFF");
+			opt->difficulty = HARD;
+			break;
+
+		case PLAYER_FIRST:
+			Serial.println("PLAYER_FIRST");
+			opt->first = Options::PLAYER;
+			opt->is_set = SettingsBT.is_set = true;
+			break;
+		case CPU_FIRST:
+			Serial.println("CPU_FIRST");
+			opt->first = Options::CPU;
+			opt->is_set = SettingsBT.is_set = true;
+			break;
+		}
+	}
+
+	SettingsBT = *opt;
+}
+
 void get_settings(Options *opt)
 {
 	switch (SM) {
@@ -97,7 +165,7 @@ void get_settings(Options *opt)
 		get_serial_settings(opt);
 		return;
 	case BLUETOOTH_SETTINGS:
-		// get_bt_settings(opt);
+		get_bt_settings(opt);
 		return;
 	default:
 		return;

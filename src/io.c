@@ -148,11 +148,7 @@ void blink_draw(char board[SIZE][SIZE])
 
 void blink_all(Color c)
 {
-	int *vec = NULL;
-	if (c == GREEN)
-		vec = (int *)greens;
-	else
-		vec = (int *)reds;
+	int *vec = (int *)((c == GREEN) ? greens : reds);
 
 	delay(500);
 	for (int i = 0; i < NUM_LEDS; ++i)
@@ -168,5 +164,22 @@ void blink_all(Color c)
 		digitalWrite(greens[i], LOW);
 		digitalWrite(reds[i], LOW);
 		delay(100);
+	}
+}
+
+void blink_loading(Color c)
+{
+	static const int pos[] = { 0, 1, 2, 5, 8, 7, 6, 3 };
+	int *vec = (int *)((c == GREEN) ? greens : reds);
+
+	for (int i = 0; i < NUM_LEDS; ++i) {
+		digitalWrite(greens[i], LOW);
+		digitalWrite(reds[i], LOW);
+	}
+
+	for (int i = 0; i < 8; ++i) {
+		digitalWrite(vec[pos[i]], HIGH);
+		delay(200);
+		digitalWrite(vec[pos[i]], LOW);
 	}
 }

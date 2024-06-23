@@ -11,6 +11,7 @@ typedef struct {
 	Difficulty difficulty;
 	Difficulty difficulty2;
 	enum { PLAYER, CPU } first;
+	bool is_set;
 } Options;
 
 typedef enum {
@@ -38,9 +39,12 @@ typedef enum {
 	SCORE_P2 = 9,
 } BtMsg;
 
+typedef enum { CONTINUE, RETURN } BtAction;
+
 void set_sm(void);
 void modal_setup(void);
 void get_settings(Options *opt);
+BtAction check_and_handle_bt(void);
 
 #ifdef __cplusplus
 }
