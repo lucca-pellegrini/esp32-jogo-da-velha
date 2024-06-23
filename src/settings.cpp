@@ -27,6 +27,8 @@ void modal_setup(void)
 	switch (SM) {
 	case SERIAL_SETTINGS:
 		Serial.begin(115200);
+		while (!Serial.available())
+			blink_loading(RED);
 		break;
 	case BLUETOOTH_SETTINGS:
 		SerialBT.begin("O Jogo da Velha");
