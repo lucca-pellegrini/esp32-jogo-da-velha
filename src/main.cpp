@@ -100,6 +100,7 @@ void loop()
 		Serial.print("Jogador “");
 		Serial.print(cur_player);
 		Serial.println("” ganhou!");
+		announce_victory(cur_player);
 		delay(1500);
 		blink_winner(cur_player, board);
 	} else if (game_draw) {

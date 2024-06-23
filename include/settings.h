@@ -45,6 +45,7 @@ void set_sm(void);
 void modal_setup(void);
 void get_settings(Options *opt);
 BtAction check_and_handle_bt(void);
+void announce_victory(char player);
 
 #ifdef __cplusplus
 }

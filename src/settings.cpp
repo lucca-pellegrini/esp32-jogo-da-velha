@@ -95,15 +95,6 @@ static void get_serial_settings(Options *opt)
 	}
 }
 
-BtAction check_and_handle_bt(void)
-{
-	if (!SerialBT.available())
-		return CONTINUE;
-
-	SettingsBT.is_set = false;
-	return RETURN;
-}
-
 static void get_bt_settings(Options *opt)
 {
 	if (SettingsBT.is_set) {
@@ -122,7 +113,7 @@ static void get_bt_settings(Options *opt)
 		case PVP:
 			Serial.println("PVP");
 			opt->game_mode = 1;
-			opt->first = Options::CPU;
+			opt->first = Options::PLAYER;
 			opt->is_set = SettingsBT.is_set = true;
 			break;
 			break;
@@ -172,4 +163,18 @@ void get_settings(Options *opt)
 	default:
 		return;
 	}
+}
+
+BtAction check_and_handle_bt(void)
+{
+	if (!SerialBT.available())
+		return CONTINUE;
+
+	SettingsBT.is_set = false;
+	return RETURN;
+}
+
+void announce_victory(char player)
+{
+	SerialBT.write((player == 'X') ? SCORE_P1 : SCORE_P2);
 }
